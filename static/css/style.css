@@ -99,6 +99,7 @@ h3 { font-size: clamp(22px, 2.4vw, 28px); font-weight: 650; letter-spacing: -0.0
 .tile-label { position: absolute; z-index: 1; left: 14px; right: 14px; bottom: 11px; display: flex; justify-content: space-between; align-items: baseline; gap: 10px; color: #fff; }
 .tile-name { font-weight: 650; font-size: clamp(14px, 1.45vw, 19px); letter-spacing: -0.01em; line-height: 1.15; }
 .tile-rate { font-family: var(--mono); font-size: clamp(12px, 1.1vw, 15px); font-weight: 500; white-space: nowrap; }
+.tile-speed { position: absolute; z-index: 1; top: 10px; right: 10px; font-family: var(--mono); font-size: 12.5px; font-weight: 500; line-height: 1; color: #fff; background: rgba(14, 26, 58, 0.72); border-radius: 4px; padding: 5px 7px; }
 .tile:hover .tile-name, .tile:focus-visible .tile-name { text-decoration: underline; text-underline-offset: 4px; }
 .tile:focus-visible { outline-offset: -3px; outline-color: #fff; }
 .wall-foot { display: flex; justify-content: space-between; align-items: flex-start; gap: 24px; padding-top: 16px; }

@@ -17,7 +17,6 @@
   const pct = v => v.toFixed(1) + '%';
 
   /* ---------- video wall ---------- */
-  const WALL_SPEED = 3;
   const wall = $('#wall');
   const toggle = $('#wall-toggle');
   let wallPaused = still, wallSeen = false;
@@ -25,11 +24,12 @@
   D.tasks.forEach(t => {
     const v = el('video', { poster: t.poster, preload: 'none', playsinline: '', loop: '', 'aria-hidden': 'true', tabindex: '-1' });
     v.muted = true;
-    v.defaultPlaybackRate = WALL_SPEED;
+    v.defaultPlaybackRate = t.wallSpeed;
     v.src = t.front;
     wallVideos.push(v);
     const tile = el('button', { class: 'tile', type: 'button', 'aria-label': t.name + ', ' + pct(t.success) + ' success. Watch in real time.' }, [
       v,
+      el('span', { class: 'tile-speed', text: t.wallSpeed + '×' }),
       el('span', { class: 'tile-label' }, [
         el('span', { class: 'tile-name', text: t.name }),
         el('span', { class: 'tile-rate', text: pct(t.success) })
@@ -38,11 +38,10 @@
     tile.addEventListener('click', () => { select(t.key, true); $('#tasks').scrollIntoView(); });
     wall.appendChild(tile);
   });
-  $('#wall-speed').textContent = WALL_SPEED + '×';
   const wallSync = () => {
     const run = wallSeen && !wallPaused;
     wallVideos.forEach(v => {
-      if (run) { v.playbackRate = WALL_SPEED; const p = v.play(); if (p) p.catch(() => {}); }
+      if (run) { v.playbackRate = v.defaultPlaybackRate; const p = v.play(); if (p) p.catch(() => {}); }
       else v.pause();
     });
     toggle.textContent = wallPaused ? 'Play videos' : 'Pause videos';
