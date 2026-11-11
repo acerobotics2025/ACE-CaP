@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ACE-CaP-0: Real-World Code-as-Policies in the Era of Experience</title>
+<meta name="description" content="ACE-CaP-0 is a recipe for developing real-world code policies: a coding agent requests robot demonstrations and runs simulated experiments while it writes, tests and revises a robot program. Eight frozen programs reach 92.1% success over 240 real-world trials.">
+<meta property="og:title" content="ACE-CaP-0: Real-World Code-as-Policies in the Era of Experience">
+<meta property="og:description" content="Demonstrations on request, simulation on demand. Eight frozen programs, 240 real-world trials, 92.1% success.">
+<meta property="og:image" content="static/posters/charger.jpg">
+<link rel="preload" href="static/fonts/bricolage-full.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="static/css/style.css">
+</head>
+<body>
+
+<a class="skip" href="#abstract">Skip to content</a>
+
+<header class="nav">
+  <div class="wrap nav-in">
+    <a class="brand" href="#top">ACE-CaP-0</a>
+    <nav aria-label="Sections">
+      <a href="#abstract">Abstract</a>
+      <a href="#investigation">Investigation</a>
+      <a href="#recipe">Recipe</a>
+      <a href="#tasks">Tasks</a>
+      <a href="#results">Results</a>
+      <a href="#cite">Cite</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+<section class="hero">
+  <div class="wrap">
+    <h1>ACE-CaP-0</h1>
+    <div class="hero-row">
+      <div>
+        <p class="hero-title">Real-World Code-as-Policies in the Era of Experience</p>
+        <p class="hero-by">ACE-CaP Team, ACE Robotics</p>
+      </div>
+      <div>
+        <p class="hero-lede">A coding agent writes the robot's program, asks for a demonstration when it lacks a strategy, and runs a simulated experiment when it needs to compare revisions. The finished program is frozen and runs with no human or coding agent in the loop.</p>
+        <div class="actions">
+          <a class="btn btn-solid" href="#tasks">Watch all eight tasks</a>
+          <a class="btn" href="#cite">Cite</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="wall" aria-label="Eight tasks on the real robot">
+  <div class="wall-grid" id="wall"></div>
+  <div class="wrap wall-foot">
+    <p>One autonomous real-world execution per task, top-down camera, played at <span id="wall-speed">3×</span> speed. Percentages are the paper's success rates over 30 trials of each frozen program. Select a task to watch it in real time.</p>
+    <button class="wall-toggle" id="wall-toggle" type="button" aria-pressed="false">Pause videos</button>
+  </div>
+</section>
+
+<section class="sec" id="abstract">
+  <div class="wrap two">
+    <div>
+      <h2>Abstract</h2>
+      <p class="abstract">Code as Policies (CaP) offers a route for general-purpose coding agents to acquire physical skills through experience and retain them in executable programs. We study experience acquisition as part of policy development: the agent decides both how to revise its program and what evidence to obtain next. Motivated by embodied recursive self-improvement, we investigate two dimensions of this process: how agents obtain human guidance and how they integrate simulated exploration with real-world feedback. Our investigation favors robot demonstrations requested as development proceeds and simulated experiments targeted at current development questions. These findings lead to ACE-CaP-0, a recipe combining Demonstrations on Request with Simulation on Demand. Across eight real-world manipulation tasks spanning alignment, multi-object handling, and bimanual coordination, the resulting frozen programs achieve 92.1% success (221/240 trials). They execute without a human or coding agent in the loop. These results demonstrate that targeted experience can be translated into reusable code for reliable physical execution, highlighting CaP as a practical route to expanding robot capabilities.</p>
+    </div>
+    <aside class="facts" aria-label="Evaluation at a glance">
+      <h3>Evaluation at a glance</h3>
+      <dl>
+        <div><dt>Tasks</dt><dd>8 real-world manipulation tasks: alignment, object reorientation, multi-object handling, bimanual coordination</dd></div>
+        <div><dt>Robot</dt><dd>Two Agilex PIPER X arms, one top-down and two wrist cameras</dd></div>
+        <div><dt>Coding agent</dt><dd>Claude Opus 5.5</dd></div>
+        <div><dt>Development budget</dt><dd>At most 10 human-assisted scene resets per task, not counting resets for demonstrations</dd></div>
+        <div><dt>Evaluation</dt><dd>30 trials per frozen program, no further updates</dd></div>
+        <div><dt>Overall success</dt><dd>221 of 240 trials (92.1%); at least 90% on 7 of 8 tasks</dd></div>
+      </dl>
+    </aside>
+  </div>
+</section>
+
+<section class="sec sec-mist" id="investigation">
+  <div class="wrap">
+    <h2>What experience to acquire, and when</h2>
+    <p class="lede">A study on charger insertion motivates the recipe. Six development conditions, one development run each, address three questions: what form of guidance to provide, when to provide it, and how to bring simulation into exploration. All use the same foundation model, task instruction, and interfaces, with at most ten human-assisted scene resets. Each resulting program is frozen and run for 30 real-world trials.</p>
+
+    <article class="study">
+      <h3>What form of guidance?</h3>
+      <p>Three forms of assistance, each available when the agent asks for it, in development without simulation. Robot demonstrations give the highest final success, and both demonstration conditions take less development time and fewer output tokens than text alone.</p>
+      <figure class="fig">
+        <img src="static/img/fig2_guidance_form.png" alt="Guidance form for charger insertion. Textual guidance: 60% final real-world success, 5.9 hours of development, 0.86 million output tokens. Robot-egocentric human video: 73%, 3.8 hours, 0.75 million. Robot demonstration with video, trajectory and key joint pose: 86%, 3.7 hours, 0.73 million." loading="lazy" width="1903" height="734">
+        <figcaption>Guidance form (paper, Fig. 2). Final success rate over 30 real-world trials of each frozen program, development time, and output token usage.</figcaption>
+      </figure>
+      <ul class="conds">
+        <li><b>Textual guidance</b><p class="cond-num"><strong>60%</strong> 5.9 h, 0.86 M tokens</p><p>Advice about manipulation strategies, action constraints, and corrections. No demonstration.</p></li>
+        <li><b>Robot-egocentric human video</b><p class="cond-num"><strong>73%</strong> 3.8 h, 0.75 M tokens</p><p>Text, plus videos of a person performing the task with their hands, recorded from the robot's execution viewpoint.</p></li>
+        <li><b>Robot demonstrations</b><p class="cond-num"><strong>86%</strong> 3.7 h, 0.73 M tokens</p><p>Text, plus kinesthetic demonstrations that provide video, arm trajectories, and key joint poses.</p></li>
+      </ul>
+    </article>
+
+    <article class="study">
+      <h3>When to provide it?</h3>
+      <p>The same textual guidance and robot demonstrations, handed over at the outset or requested by the agent. On request, final success is 86% against 53%, development time falls from 7.2 to 3.7 hours, and output tokens from 1.16 to 0.73 million.</p>
+      <figure class="fig">
+        <img src="static/img/fig3_guidance_timing.png" alt="Guidance timing for charger insertion. Upfront guidance: 53% final real-world success, 7.2 hours of development, 1.16 million output tokens. On-request guidance: 86%, 3.7 hours, 0.73 million." loading="lazy" width="1898" height="614">
+        <figcaption>Guidance timing (paper, Fig. 3). On-request guidance is the same development run as robot demonstrations above.</figcaption>
+      </figure>
+      <ul class="conds" style="--n:2">
+        <li><b>Upfront guidance</b><p class="cond-num"><strong>53%</strong> 7.2 h, 1.16 M tokens</p><p>The agent receives textual guidance and robot demonstrations at the start of development.</p></li>
+        <li><b>On-request guidance</b><p class="cond-num"><strong>86%</strong> 3.7 h, 0.73 M tokens</p><p>The agent decides whether and when to ask, before its first physical attempt or during later revision.</p></li>
+      </ul>
+    </article>
+
+    <article class="study">
+      <h3>How should simulation come in?</h3>
+      <p>Simulation as a separate stage before transfer, or as a tool the agent calls on during real-world development. Simulation on demand reaches 100% final success against 86% for real-only development, in 2.6 rather than 3.7 hours, with more output tokens.</p>
+      <figure class="fig">
+        <img src="static/img/fig4_simulation.png" alt="Simulation protocols for charger insertion. Real-only: 86% final real-world success, 3.7 hours of development, 0.73 million output tokens. Sequential real-sim-real: 0%, 3.5 hours, 1.86 million. Simulation on demand: 100%, 2.6 hours, 1.09 million." loading="lazy" width="1936" height="916">
+        <figcaption>Simulation protocols (paper, Fig. 4). Real-only is the same development run as robot demonstrations and on-request guidance above.</figcaption>
+      </figure>
+      <ul class="conds">
+        <li><b>Real-only</b><p class="cond-num"><strong>86%</strong> 3.7 h, 0.73 M tokens</p><p>Development through real-world execution and feedback, without simulation. Text and robot demonstrations on request.</p></li>
+        <li><b>Sequential real-sim-real</b><p class="cond-num"><strong>0%</strong> 3.5 h, 1.86 M tokens</p><p>Demonstrations first, then a simulation built from the real setup and ten rounds of simulated exploration in four parallel environments, then transfer. The transferred program fails at grasping the plug: it was refined against cleaner simulated images and depth without the real sensor's close-range blind regions.</p></li>
+        <li><b>Simulation on demand</b><p class="cond-num"><strong>100%</strong> 2.6 h, 1.09 M tokens</p><p>Development stays in the real-world loop. The agent decides whether and when to simulate, which task segment and initial state to examine, and which revisions to test. Text and robot demonstrations on request.</p></li>
+      </ul>
+    </article>
+
+    <p class="aside study-note">Percentages are final real-world success over 30 trials of the frozen program. Development time is elapsed hours, including model calls, simulated experiments, and real-world interaction; tokens are output tokens across all model calls during development. Each condition is a single development run on one task, so the 30 trials measure the reliability of the resulting program, while the repeatability of the development process remains to be established.</p>
+  </div>
+</section>
+
+<section class="sec" id="recipe">
+  <div class="wrap">
+    <h2>One development loop, two sources of experience</h2>
+    <div class="cols">
+      <p>The working artifact is a program. The agent starts from a task instruction, observations of the workspace, and the robot's perception and control interfaces, and writes code that specifies action sequences, geometric computations, motion parameters, and gripper commands.</p>
+      <p>At each step it weighs the current program against the evidence it has and the question that is still open. It can revise the code, request a demonstration, organize a simulated experiment, or run a candidate on the robot. Neither demonstrations nor simulation is required in every iteration.</p>
+    </div>
+    <figure class="fig fig-wide">
+      <img src="static/img/fig5_recipe.png" alt="Diagram of ACE-CaP-0. Policy development: the coding agent develops an evolving code policy through a shared robot toolbox and real-world interaction, requesting demonstrations and simulation as needed. Policy execution: the frozen code policy drives the robot with no human or coding agent in the loop." loading="lazy" width="1951" height="1361">
+      <figcaption>From policy development to standalone execution (paper, Fig. 5). During development the agent writes and revises the policy using real-world feedback, through a robot toolbox it also uses for direct exploration; it can request kinesthetic demonstrations or test candidate code in simulation for a chosen task segment and initial state. The resulting policy is frozen and executes without a human or coding agent in the loop.</figcaption>
+    </figure>
+
+    <!-- Demonstrations on request -->
+    <article class="strand strand-demo" id="demonstrations">
+      <header class="strand-head">
+        <h3>Demonstrations on request</h3>
+        <p>The agent asks for a demonstration when it judges that seeing how a person performs the task with the robot would help it build or revise the policy. A person physically guides the arms through the task; the agent receives video, recorded arm trajectories, and key joint poses that capture the arm configurations at critical stages, and reads them together. The demonstrated action order and arm roles inform the program's structure; approach directions, motion paths, and key joint poses inform individual actions.</p>
+      </header>
+
+      <div class="log">
+        <p class="log-title">From a charger-insertion development log</p>
+        <p class="log-note">Messages are translated from the Chinese originals and abridged. In this session the protocol had the agent begin with one whole-task demonstration; the later question was the agent's own decision.</p>
+
+        <ol class="thread">
+          <li>
+            <span class="who who-agent">Agent asks</span>
+            <blockquote>Please guide the robot arm by hand through the whole task once: insert the white charger on the table into the power strip. Do it the way you think is best. Please note how you grasp the charger so that the pins end up pointing down, and push down until its bottom sits flat on the strip. Pause for a second or two at the key positions (before the grasp, after the grasp, when aligned with the socket, after insertion) so that I can find the key poses in the recording, and open and close the gripper as you go.</blockquote>
+          </li>
+          <li>
+            <span class="who who-human">Person demonstrates</span>
+            <div class="frames frames-4">
+              <figure><img src="static/img/demo/teach_1.jpg" alt="Top-down camera: two hands guide the left gripper over a power strip." loading="lazy" width="640" height="480"><figcaption>Guiding the left arm to the strip</figcaption></figure>
+              <figure><img src="static/img/demo/teach_2.jpg" alt="Wrist camera: fingers pinch the gripper's fingers while it holds the charger in the socket." loading="lazy" width="640" height="480"><figcaption>Pushing in, hand squeezing the gripper fingers</figcaption></figure>
+              <figure><img src="static/img/demo/teach_3.jpg" alt="Wrist camera: closed gripper fingertips press on top of the white charger standing in the socket." loading="lazy" width="640" height="480"><figcaption>Fingers closed, pressing the charger's top</figcaption></figure>
+              <figure><img src="static/img/demo/teach_4.jpg" alt="Top-down camera: charger plugged into the strip, both arms parked." loading="lazy" width="640" height="480"><figcaption>End state</figcaption></figure>
+            </div>
+            <div class="chart" id="teach-chart" role="img" aria-label="Recorded left-arm trajectory of the demonstration: fingertip height and gripper opening over 49 seconds."></div>
+            <p class="chart-cap">What the agent receives besides video: the recorded left-arm fingertip height and gripper opening of this demonstration. The closing press, with the gripper shut, is the step the agent first overlooked.</p>
+          </li>
+          <li>
+            <span class="who who-agent">Agent reads the recording</span>
+            <blockquote class="en">during the held push the operator's hands PINCHED the gripper fingers (much more squeeze than the robot's 2 N); after release the charger stood deep; the closed fingertips then visibly pressed its top</blockquote>
+            <p class="aside">From the agent's own notes, in English in the original.</p>
+          </li>
+          <li>
+            <span class="who who-agent">Agent asks again, after three failed insertions</span>
+            <blockquote>I have now failed this step three times. Holding the charger, I align it with the slots and push down, but the pins go in only 5–8 mm and then stop: the gripper squeezes with about 2 N at most, and pushing further makes the charger slide up between the fingers. As soon as I open the gripper the charger springs out and falls over. How did you manage it in your demonstration? A. Release as soon as the pins enter, then press the top with closed fingertips. B. Push the pins in deep before releasing (how deep?). C. Support the charger with the other hand. D. Something else.</blockquote>
+          </li>
+          <li>
+            <span class="who who-human">Person answers</span>
+            <blockquote>B. Push in deep first: until the gripper itself bottoms out, rather than the pins, which is hard and may not succeed. Only then release.</blockquote>
+          </li>
+          <li>
+            <span class="who who-code">What ends up in the program</span>
+            <pre class="code" data-lang="python"><code>def release_and_press(ctx, arm, xy, z_table, stroke_mm):
+    """Let go of the charger standing in the socket at XY (the table at Z_TABLE) without touching it, then with the
+    closed fingertips find its top and press it home (the 17:02 demo's last step), and touch it again to check.
+
+    Pressed up to PRESS_TRIES times until a light touch finds the top at the seated height (operator 11-11 00:03:
+    用合拢的夹爪从充电器顶上竖直往下用力压到底). Returns {'ok', 'seated', 'touch' (first touch over the table),
+    'after' (last touch), 'presses'}."""
+    gripper(ctx, arm, max(stroke_mm - RELAX_BELOW_MM, 0))
+    gripper(ctx, arm, RELEASE_MM)
+    straight(ctx, arm, [xy[0], xy[1], z_table + CLEAR_ABOVE_TABLE], speed=LIFT_SPEED)
+    gripper(ctx, arm, 0)
+    t = touch_top(ctx, arm, xy, z_table)
+    ...</code></pre>
+            <p class="aside">Agent-written code from the same session, unedited apart from truncation. The docstring cites the demonstration and the operator's advice (the Chinese reads: "with the gripper closed, press straight down hard on the charger's top until it is fully in").</p>
+          </li>
+        </ol>
+      </div>
+    </article>
+
+    <!-- Simulation on demand -->
+    <article class="strand strand-sim" id="simulation">
+      <header class="strand-head">
+        <h3>Simulation on demand</h3>
+        <p>A simulated experiment starts from a development question: does an approach path avoid an obstruction, how does a motion parameter change the interaction, in what order should coordinated actions run. The agent chooses the task segment, the initial state, and the candidate changes to test, then interprets the outcome against the question that motivated it. The conclusion applies to the behavior and conditions that experiment examined; physical execution then tests the revision on the robot.</p>
+      </header>
+
+      <div class="log">
+        <p class="log-title">From a parcel-reorientation development log</p>
+        <p class="log-note">One evening, two simulated experiments, each answered in about ten minutes. Messages are translated from the Chinese originals and abridged.</p>
+
+        <ol class="thread">
+          <li>
+            <span class="who who-robot">On the robot</span>
+            <p>The parcel lies very close to the robot, rotated 45°. The program finds no start pose that both hands can reach and stops without moving.</p>
+          </li>
+          <li>
+            <span class="who who-agent">Agent revises the code and asks for an experiment</span>
+            <blockquote>Scene: the box lies close to the robot, between the arms, rotated 45°, label not facing up. The program should push the box outwards before turning it, but before the push it finds no grasp both hands can reach (28 candidates rejected), so it stops. Change: when sliding or pushing, also try contact points offset by 3 and 4.5 cm with the hand tilted 15° or 20°; if one pair of faces fails, try the other pair. Please use this box position and angle (x 0.24–0.27 m, 42°–48°, both directions), run the whole flow five times, and check whether the push, turn, flip and pull-back all succeed.</blockquote>
+          </li>
+          <li>
+            <span class="who who-sim">In simulation</span>
+            <div class="frames frames-2">
+              <figure><img src="static/img/sim/parcel_twin_start.jpg" alt="Digital twin, top-down camera: a taped cardboard box lies rotated between two grippers." loading="lazy" width="640" height="320"><figcaption>One of the five initial states in the twin</figcaption></figure>
+              <figure><img src="static/img/sim/parcel_twin_done.jpg" alt="Digital twin, top-down camera: the box squared up with its shipping label facing up." loading="lazy" width="640" height="320"><figcaption>The same state after the final revision: label up</figcaption></figure>
+            </div>
+            <p>Five initial states run in four parallel digital twins, with the candidate code unchanged and no agent in the loop. The previous code reproduces the real stop. The revision succeeds in four of five; in the fifth the backend refuses a two-arm straight-line move, because the right arm cannot reach the pose 77% of the way along the line.</p>
+          </li>
+          <li>
+            <span class="who who-robot">On the robot</span>
+            <p>The next real run meets the same refusal, 65% of the way along the line.</p>
+          </li>
+          <li>
+            <span class="who who-agent">Agent finds the cause</span>
+            <p>The right wrist's last joint sits within a few hundredths of a radian of its limit at the pre-pose, while the start pose was solved with the opposite half-turn, so the straight line between them runs into the limit. The fix rejects candidates whose waypoints mix half-turn solutions. Replaying the planner on 674 box measurements recorded on the robot leaves 672 plans unchanged; the other two are this scene.</p>
+          </li>
+          <li>
+            <span class="who who-sim">In simulation</span>
+            <p>The same five states again. The previous code reproduces the refusal; the fix succeeds in five of five.</p>
+          </li>
+          <li>
+            <span class="who who-robot">On the robot</span>
+            <p>The next real run finds a start pose, pushes the parcel 9.3 cm and turns it, with no refusal. A flip check later in that run failed for an unrelated reason and was revised separately.</p>
+          </li>
+        </ol>
+
+        <div class="twin">
+          <div class="frames frames-2">
+            <figure><img src="static/img/sim/uncap_real.jpg" alt="Real top-down camera view: a clear bottle with a white cap on a white table." loading="lazy" width="640" height="404"><figcaption>Real camera</figcaption></figure>
+            <figure><img src="static/img/sim/uncap_twin.jpg" alt="Digital-twin rendering of the same scene: the bottle at the same place and tilt." loading="lazy" width="640" height="404"><figcaption>Digital twin</figcaption></figure>
+          </div>
+          <p>The same initial state of bottle uncapping, seen by the real camera and rendered in the twin. The twins mirror the station's kinematics, camera poses, fixed obstacles and safety checks. That makes them good at questions of geometry and control flow like the one above; the reliability of contact, such as a grasp or an insertion, is left to the robot.</p>
+        </div>
+      </div>
+    </article>
+
+    <!-- The program -->
+    <article class="strand strand-code" id="program">
+      <header class="strand-head">
+        <h3>The policy is a program</h3>
+        <p>At the end of development the agent produces a condensed code policy that retains the task logic and execution details worked out through interaction, expressed in its action structure, geometric computations, and motion parameters. Once frozen, its decision rules stay fixed, while runtime observations still change the values those rules compute and the actions that result. It executes without a human or coding agent in the loop.</p>
+      </header>
+      <pre class="code code-tall" data-lang="python"><code>g = M.grasp_standing(ctx, arm, t['xy'], t['z_top'], t['close_yaw'], CARRY_Z)
+run.log('grasp', **g)
+if not g['ok']:
+    to_safe(ctx, arm)
+    return run.report(False, 'grasp: ' + g['why'])
+
+c = M.carry_level(ctx, arm, target['xy'], (CARRY_Z, CARRY_LOW_Z), slot_yaw)
+run.log('carry', **c)
+if not c['ok']:
+    M.straight(ctx, arm, [t['xy'][0], t['xy'][1], g['z_grasp'] + 0.002], speed=0.3)
+    return run.report(False, 'carry: ' + c['why'] + ' (charger held back at its start)')
+
+z_table = table_z(plane, target['xy'][0], target['xy'][1])
+ins = M.find_slots(ctx, arm, target['xy'], s['axis'], z_table, g['top_above_tip'], log=run.log)
+run.log('insert', **{k: v for k, v in ins.items() if k != 'touches'})
+if not ins['ok']:
+    M.straight(ctx, arm, c['tip'], speed=0.4)
+    return run.report(False, 'insert: ' + ins['why'] + ' (charger still held above the strip)')
+xy = ins['xy']
+# operator 23:35: straighten it, then push hard to the bottom (holding)
+st = M.straighten(ctx, arm, g['stroke_mm'])
+push = M.guarded(ctx, arm, [xy[0], xy[1], z_table + M.FLOOR_ABOVE_TABLE], M.PUSH_RISE_A, speed=M.TOUCH_SPEED)
+run.log('push', stroke_mm=st['stroke_mm'], z=round(push['tip'][2] - z_table, 4), fired=push['fired'],
+        why=push['why'], largest=push['largest'])
+
+p = M.release_and_press(ctx, arm, xy, z_table, st['stroke_mm'])
+run.log('press', **p)
+M.straight(ctx, arm, [xy[0], xy[1], z_table + M.CLEAR_ABOVE_TABLE], speed=0.4)
+fid = V.observe(ctx, ['front', 'wrist_right', 'wrist_' + arm])
+run.log('final_view', frame=fid)
+if not p['ok']:
+    ctx.value('piper_park')
+    return run.report(False, 'press: ' + p['why'], frame=fid, press=p)
+M.gripper(ctx, arm, 0)
+ctx.value('piper_park')
+return run.report(True, socket=xy, kind=target['kind'], press=p, frame=fid)</code></pre>
+      <p class="aside">The main sequence of an agent-written charger-insertion program from a development session: grasp, carry, feel for the slots, straighten, push, release and press, look, report. Two debugging early-exits are omitted.</p>
+    </article>
+  </div>
+</section>
+
+<section class="sec sec-mist" id="tasks">
+  <div class="wrap">
+    <h2>Eight tasks</h2>
+    <p class="lede">The tasks span alignment, object reorientation, multi-object handling, and bimanual coordination. They include inserting a charger into a socket, removing a bottle cap while stabilizing the bottle, and placing a pair of shoes into a box.</p>
+
+    <div class="picker" role="tablist" aria-label="Tasks" id="picker"></div>
+
+    <div class="task" id="task-panel" role="tabpanel" aria-live="polite">
+      <div class="task-video" id="task-video"></div>
+      <div class="task-body">
+        <div class="task-text">
+          <h3 id="task-name"></h3>
+          <p id="task-desc"></p>
+        </div>
+        <dl class="task-stats" id="task-stats"></dl>
+      </div>
+      <div class="story" id="task-story"></div>
+      <p class="aside" id="task-note"></p>
+    </div>
+
+    <figure class="fig fig-wide platform">
+      <img src="static/img/fig6_platform.png" alt="The dual-arm platform: two Agilex PIPER X arms on a tabletop, a camera on a mast between them and a camera on each wrist, beside representative scenes of the eight tasks." loading="lazy" width="1956" height="559">
+      <figcaption>Platform and tasks (paper, Fig. 6): two Agilex PIPER X arms and three Orbbec DaBai DC1 cameras, giving one top-down view and two wrist-mounted views.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="sec" id="results">
+  <div class="wrap">
+    <h2>221 of 240 real-world trials succeed</h2>
+    <p class="lede">Each program is developed with at most ten human-assisted scene resets, then frozen and run for 30 trials that are separate from development. Seven of the eight tasks reach at least 90%.</p>
+
+    <div class="tablechart" id="results-table"></div>
+    <p class="chart-cap">Success rate over 30 evaluation trials, mean physical execution time of the frozen program, and output tokens generated across all model calls during policy development (paper, Table 1 and Fig. 7).</p>
+
+    <div class="cols cols-notes">
+      <p>Charger Insertion succeeds in all 30 trials and Chicken Plating in 29. Bread Packing, at 25 of 30, is the one task below 90%. Development uses between 0.75 and 2.14 million output tokens per task.</p>
+      <p>Mean physical execution times range from 0.97 to 2.27 minutes, and six of the eight tasks average less than two minutes. Parcel Reorientation is the shortest at 0.97 minutes; Bottle Uncapping and Shoe Packing are the longest at 2.23 and 2.27 minutes, both with 90% success.</p>
+    </div>
+  </div>
+</section>
+
+<section class="sec sec-cite" id="cite">
+  <div class="wrap">
+    <h2>Cite</h2>
+    <div class="bib">
+      <pre id="bibtex">@techreport{acecap0,
+  title       = {ACE-CaP-0: Real-World Code-as-Policies in the Era of Experience},
+  author      = {{ACE-CaP Team}},
+  institution = {ACE Robotics},
+  year        = {2026}
+}</pre>
+      <button class="btn" id="copy-bib" type="button">Copy BibTeX</button>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <p>ACE-CaP Team, ACE Robotics, 2026. Reported numbers are from the paper. Videos, messages, and code are from the team's real-robot development and execution records.</p>
+  </div>
+</footer>
+
+<script src="static/js/data.js"></script>
+<script src="static/js/main.js"></script>
+</body>
+</html>
