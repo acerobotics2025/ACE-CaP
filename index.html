@@ -65,7 +65,7 @@
   <div class="wrap two">
     <div>
       <h2>Abstract</h2>
-      <p class="abstract">Code as Policies (CaP) offers a route for general-purpose coding agents to acquire physical skills through experience and retain them in executable programs. As an agent refines its policy through real-world interaction, a central challenge is to achieve reliable performance on challenging tasks while limiting the cost of physical experimentation. We investigate human guidance as a source of priors for feasible actions and simulation as an auxiliary environment for exploring and testing candidate policies. Our findings favor robot demonstrations available on request and simulation used selectively during real-world policy refinement. These findings inform ACE-CaP-0, an agentic recipe that couples policy revision with experience acquisition through Demonstrations on Request and Simulation on Demand. Across eight real-world manipulation tasks spanning alignment, multi-object handling, and bimanual coordination, the resulting frozen programs achieve 92.1% success (221/240 trials). Mean execution times are 0.97–2.27 minutes. The programs execute with runtime perception and control, without a human or coding agent in the loop. These results highlight CaP’s potential to turn experience into reliable, reusable physical skills.</p>
+      <p class="abstract">Recent advances in frontier models have pushed the boundaries of agentic robot control, enabling agents to perform complex robotic tasks through reasoning and interaction. However, repeated calls to these models during execution can substantially increase task completion time. Code as Policies (CaP) offers a route for coding agents to acquire physical skills through experience and retain them in executable programs, allowing the reasoning invested in development to be reused across runs. Developing reliable code policies while limiting the cost of physical experimentation remains a central challenge. We investigate human guidance as a source of priors for feasible actions and simulation as an auxiliary environment for exploring and testing candidate policies. Our findings favor robot demonstrations available on request and simulation used selectively during real-world policy refinement. These findings inform ACE-CaP-0, an agentic recipe that couples policy revision with experience acquisition through Demonstrations on Request and Simulation on Demand. Across eight real-world manipulation tasks spanning alignment, multi-object handling, and bimanual coordination, the resulting frozen programs achieve 92.1% success (221/240 trials). Mean execution times across tasks range from 0.97 to 2.27 minutes. The programs execute with runtime perception and control, without a human or coding agent in the loop. These results highlight CaP’s potential to turn experience into reliable, reusable physical skills.</p>
     </div>
     <aside class="facts" aria-label="Evaluation at a glance">
       <h3>Evaluation at a glance</h3>
@@ -91,38 +91,38 @@
       <h3>What form of guidance?</h3>
       <p>Three forms of assistance, each available when the agent asks for it, in development without simulation. Robot demonstrations give the highest final success, and both demonstration conditions take less development time and fewer output tokens than text alone.</p>
       <figure class="fig">
-        <img src="static/img/fig2_guidance_form.png" alt="Guidance form for charger insertion. Textual guidance: 60% final real-world success, 5.9 hours of development, 0.86 million output tokens. Robot-egocentric human video: 73%, 3.8 hours, 0.75 million. Robot demonstration with video, trajectory and key joint pose: 86%, 3.7 hours, 0.73 million." loading="lazy" width="1903" height="734">
+        <img src="static/img/fig2_guidance_form.png" alt="Guidance form for charger insertion. Textual guidance: 60% final real-world success, 5.9 hours of development, 0.86 million output tokens. Robot-egocentric human video: 73.3%, 3.8 hours, 0.75 million. Robot demonstration with video, trajectory and key joint pose: 86.7%, 3.7 hours, 0.73 million." loading="lazy" width="1903" height="734">
         <figcaption>Guidance form (paper, Fig. 2). Final success rate over 30 real-world trials of each frozen program, development time, and output token usage.</figcaption>
       </figure>
       <ul class="conds">
         <li><b>Textual guidance</b><p class="cond-num"><strong>60%</strong> 5.9 h, 0.86 M tokens</p><p>Advice about manipulation strategies, action constraints, and corrections. No demonstration.</p></li>
-        <li><b>Robot-egocentric human video</b><p class="cond-num"><strong>73%</strong> 3.8 h, 0.75 M tokens</p><p>Text, plus videos of a person performing the task with their hands, recorded from the robot's execution viewpoint.</p></li>
-        <li><b>Robot demonstrations</b><p class="cond-num"><strong>86%</strong> 3.7 h, 0.73 M tokens</p><p>Text, plus kinesthetic demonstrations that provide video, arm trajectories, and key joint poses.</p></li>
+        <li><b>Robot-egocentric human video</b><p class="cond-num"><strong>73.3%</strong> 3.8 h, 0.75 M tokens</p><p>Text, plus videos of a person performing the task with their hands, recorded from the robot's execution viewpoint.</p></li>
+        <li><b>Robot demonstrations</b><p class="cond-num"><strong>86.7%</strong> 3.7 h, 0.73 M tokens</p><p>Text, plus kinesthetic demonstrations that provide video, arm trajectories, and key joint poses.</p></li>
       </ul>
     </article>
 
     <article class="study">
       <h3>When to provide it?</h3>
-      <p>The same textual guidance and robot demonstrations, handed over at the outset or requested by the agent. On request, final success is 86% against 53%, development time falls from 7.2 to 3.7 hours, and output tokens from 1.16 to 0.73 million.</p>
+      <p>The same textual guidance and robot demonstrations, handed over at the outset or requested by the agent. On request, final success is 86.7% against 53.3%, development time falls from 7.2 to 3.7 hours, and output tokens from 1.16 to 0.73 million.</p>
       <figure class="fig">
-        <img src="static/img/fig3_guidance_timing.png" alt="Guidance timing for charger insertion. Upfront guidance: 53% final real-world success, 7.2 hours of development, 1.16 million output tokens. On-request guidance: 86%, 3.7 hours, 0.73 million." loading="lazy" width="1898" height="614">
+        <img src="static/img/fig3_guidance_timing.png" alt="Guidance timing for charger insertion. Upfront guidance: 53.3% final real-world success, 7.2 hours of development, 1.16 million output tokens. On-request guidance: 86.7%, 3.7 hours, 0.73 million." loading="lazy" width="1898" height="614">
         <figcaption>Guidance timing (paper, Fig. 3). On-request guidance is the same development run as robot demonstrations above.</figcaption>
       </figure>
       <ul class="conds" style="--n:2">
-        <li><b>Upfront guidance</b><p class="cond-num"><strong>53%</strong> 7.2 h, 1.16 M tokens</p><p>The agent receives textual guidance and robot demonstrations at the start of development.</p></li>
-        <li><b>On-request guidance</b><p class="cond-num"><strong>86%</strong> 3.7 h, 0.73 M tokens</p><p>The agent decides whether and when to ask, before its first physical attempt or during later revision.</p></li>
+        <li><b>Upfront guidance</b><p class="cond-num"><strong>53.3%</strong> 7.2 h, 1.16 M tokens</p><p>The agent receives textual guidance and robot demonstrations at the start of development.</p></li>
+        <li><b>On-request guidance</b><p class="cond-num"><strong>86.7%</strong> 3.7 h, 0.73 M tokens</p><p>The agent decides whether and when to ask, before its first physical attempt or during later revision.</p></li>
       </ul>
     </article>
 
     <article class="study">
       <h3>How should simulation come in?</h3>
-      <p>Simulation as a separate stage before transfer, or as a tool the agent calls on during real-world development. Simulation on demand reaches 100% final success against 86% for real-only development, in 2.6 rather than 3.7 hours, with more output tokens.</p>
+      <p>Simulation as a separate stage before transfer, or as a tool the agent calls on during real-world development. Simulation on demand reaches 100% final success against 86.7% for real-only development, in 2.6 rather than 3.7 hours, with more output tokens.</p>
       <figure class="fig">
-        <img src="static/img/fig4_simulation.png" alt="Simulation protocols for charger insertion. Real-only: 86% final real-world success, 3.7 hours of development, 0.73 million output tokens. Sequential real-sim-real: 0%, 3.5 hours, 1.86 million. Simulation on demand: 100%, 2.6 hours, 1.09 million." loading="lazy" width="1936" height="916">
+        <img src="static/img/fig4_simulation.png" alt="Simulation protocols for charger insertion. Real-only: 86.7% final real-world success, 3.7 hours of development, 0.73 million output tokens. Sequential real-sim-real: 0%, 3.5 hours, 1.86 million. Simulation on demand: 100%, 2.6 hours, 1.09 million." loading="lazy" width="1936" height="916">
         <figcaption>Simulation protocols (paper, Fig. 4). Real-only is the same development run as robot demonstrations and on-request guidance above.</figcaption>
       </figure>
       <ul class="conds">
-        <li><b>Real-only</b><p class="cond-num"><strong>86%</strong> 3.7 h, 0.73 M tokens</p><p>Development through real-world execution and feedback, without simulation. Text and robot demonstrations on request.</p></li>
+        <li><b>Real-only</b><p class="cond-num"><strong>86.7%</strong> 3.7 h, 0.73 M tokens</p><p>Development through real-world execution and feedback, without simulation. Text and robot demonstrations on request.</p></li>
         <li><b>Sequential real-sim-real</b><p class="cond-num"><strong>0%</strong> 3.5 h, 1.86 M tokens</p><p>Demonstrations first, then a simulation built from the real setup and ten rounds of simulated exploration in four parallel environments, then transfer. The transferred program fails at grasping the plug: it was refined against cleaner simulated images and depth without the real sensor's close-range blind regions.</p></li>
         <li><b>Simulation on demand</b><p class="cond-num"><strong>100%</strong> 2.6 h, 1.09 M tokens</p><p>Development stays in the real-world loop. The agent decides whether and when to simulate, which task segment and initial state to examine, and which revisions to test. Text and robot demonstrations on request.</p></li>
       </ul>
