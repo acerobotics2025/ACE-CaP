@@ -24,8 +24,10 @@
       <a href="#recipe">Recipe</a>
       <a href="#tasks">Tasks</a>
       <a href="#results">Results</a>
+      <a href="#authors">Authors</a>
       <a href="#cite">Cite</a>
     </nav>
+    <a class="nav-paper" href="static/ACE-CaP-0.pdf">Paper</a>
   </div>
 </header>
 
@@ -37,12 +39,13 @@
     <div class="hero-row">
       <div>
         <p class="hero-title">Real-World Code-as-Policies in the Era of Experience</p>
-        <p class="hero-by">ACE-CaP Team, ACE Robotics</p>
+        <p class="hero-by">ACE-CaP Team, ACE Robotics<br><a href="#authors">Contributions and author list</a></p>
       </div>
       <div>
         <p class="hero-lede">A coding agent writes the robot's program, asks for a demonstration when it lacks a strategy, and runs a simulated experiment when it needs to compare revisions. The finished program is frozen and runs with no human or coding agent in the loop.</p>
         <div class="actions">
-          <a class="btn btn-solid" href="#tasks">Watch all eight tasks</a>
+          <a class="btn btn-solid" href="static/ACE-CaP-0.pdf">Read the paper (PDF)</a>
+          <a class="btn" href="#tasks">Watch all eight tasks</a>
           <a class="btn" href="#cite">Cite</a>
         </div>
       </div>
@@ -53,7 +56,7 @@
 <section class="wall" aria-label="Eight tasks on the real robot">
   <div class="wall-grid" id="wall"></div>
   <div class="wrap wall-foot">
-    <p>One autonomous real-world execution per task, top-down camera. Each tile is sped up by the factor in its corner, 3× or 6×, so that motion looks similar across tasks. Percentages are the paper's success rates over 30 trials of each frozen program. Select a task to watch it in real time.</p>
+    <p>One autonomous real-world execution per task, top-down camera, played at <span id="wall-speed">3×</span> speed. Percentages are the paper's success rates over 30 trials of each frozen program. Select a task to watch it in real time.</p>
     <button class="wall-toggle" id="wall-toggle" type="button" aria-pressed="false">Pause videos</button>
   </div>
 </section>
@@ -62,7 +65,7 @@
   <div class="wrap two">
     <div>
       <h2>Abstract</h2>
-      <p class="abstract">Code as Policies (CaP) offers a route for general-purpose coding agents to acquire physical skills through experience and retain them in executable programs. We study experience acquisition as part of policy development: the agent decides both how to revise its program and what evidence to obtain next. Motivated by embodied recursive self-improvement, we investigate two dimensions of this process: how agents obtain human guidance and how they integrate simulated exploration with real-world feedback. Our investigation favors robot demonstrations requested as development proceeds and simulated experiments targeted at current development questions. These findings lead to ACE-CaP-0, a recipe combining Demonstrations on Request with Simulation on Demand. Across eight real-world manipulation tasks spanning alignment, multi-object handling, and bimanual coordination, the resulting frozen programs achieve 92.1% success (221/240 trials). They execute without a human or coding agent in the loop. These results demonstrate that targeted experience can be translated into reusable code for reliable physical execution, highlighting CaP as a practical route to expanding robot capabilities.</p>
+      <p class="abstract">Code as Policies (CaP) offers a route for general-purpose coding agents to acquire physical skills through experience and retain them in executable programs. As an agent refines its policy through real-world interaction, a central challenge is to achieve reliable performance on challenging tasks while limiting the cost of physical experimentation. We investigate human guidance as a source of priors for feasible actions and simulation as an auxiliary environment for exploring and testing candidate policies. Our findings favor robot demonstrations available on request and simulation used selectively during real-world policy refinement. These findings inform ACE-CaP-0, an agentic recipe that couples policy revision with experience acquisition through Demonstrations on Request and Simulation on Demand. Across eight real-world manipulation tasks spanning alignment, multi-object handling, and bimanual coordination, the resulting frozen programs achieve 92.1% success (221/240 trials). Mean execution times are 0.97–2.27 minutes. The programs execute with runtime perception and control, without a human or coding agent in the loop. These results highlight CaP’s potential to turn experience into reliable, reusable physical skills.</p>
     </div>
     <aside class="facts" aria-label="Evaluation at a glance">
       <h3>Evaluation at a glance</h3>
@@ -72,6 +75,7 @@
         <div><dt>Coding agent</dt><dd>Claude Opus 5.5</dd></div>
         <div><dt>Development budget</dt><dd>At most 10 human-assisted scene resets per task, not counting resets for demonstrations</dd></div>
         <div><dt>Evaluation</dt><dd>30 trials per frozen program, no further updates</dd></div>
+        <div><dt>Mean execution time</dt><dd>0.97 to 2.27 minutes per task</dd></div>
         <div><dt>Overall success</dt><dd>221 of 240 trials (92.1%); at least 90% on 7 of 8 tasks</dd></div>
       </dl>
     </aside>
@@ -136,7 +140,7 @@
       <p>At each step it weighs the current program against the evidence it has and the question that is still open. It can revise the code, request a demonstration, organize a simulated experiment, or run a candidate on the robot. Neither demonstrations nor simulation is required in every iteration.</p>
     </div>
     <figure class="fig fig-wide">
-      <img src="static/img/fig5_recipe.png" alt="Diagram of ACE-CaP-0. Policy development: the coding agent develops an evolving code policy through a shared robot toolbox and real-world interaction, requesting demonstrations and simulation as needed. Policy execution: the frozen code policy drives the robot with no human or coding agent in the loop." loading="lazy" width="1951" height="1361">
+      <img src="static/img/fig5_recipe.png" alt="Diagram of ACE-CaP-0. Policy development: the coding agent develops an evolving code policy through a shared robot toolbox and real-world interaction, requesting demonstrations and simulation as needed. Policy execution: the frozen code policy drives the robot with no human or coding agent in the loop." loading="lazy" width="1941" height="1354">
       <figcaption>From policy development to standalone execution (paper, Fig. 5). During development the agent writes and revises the policy using real-world feedback, through a robot toolbox it also uses for direct exploration; it can request kinesthetic demonstrations or test candidate code in simulation for a chosen task segment and initial state. The resulting policy is frozen and executes without a human or coding agent in the loop.</figcaption>
     </figure>
 
@@ -346,15 +350,34 @@ return run.report(True, socket=xy, kind=target['kind'], press=p, frame=fid)</cod
   </div>
 </section>
 
+<section class="sec sec-mist" id="authors">
+  <div class="wrap">
+    <h2>Contributions and author list</h2>
+    <dl class="team">
+      <div><dt>Core contributors</dt><dd>Changxu Wei<sup>1,2</sup>, Yunpeng Qing<sup>1,3</sup>, Guozheng Ma<sup>1,4</sup></dd></div>
+      <div><dt>Contributors</dt><dd>Bowen Liu<sup>1</sup>, Zexin He<sup>1</sup>, Yilun Kong<sup>1</sup>, Haoming Gu<sup>1</sup>, Jingyuan Liu<sup>1</sup>, Tianyu Zhu<sup>1</sup>, Jianfei Wang<sup>1</sup>, Junqiang Kou<sup>1</sup>, Huinan Mo<sup>1</sup>, Hao Lv<sup>1</sup>, Pengbin Li<sup>1</sup>, Yuesong Wang<sup>1</sup>, Bo Li<sup>1</sup>, Huan Zhou<sup>1</sup>, Shunyu Liu<sup>4</sup>, Chunxiao Liu<sup>1</sup>, Bixuan Jin<sup>1</sup>, Shaopeng Yin<sup>1</sup>, Fei Wang<sup>1</sup></dd></div>
+      <div><dt>Advisors</dt><dd>Zhi Hou<sup>1,†</sup>, Jiaxing Huang<sup>2</sup>, Changqing Zou<sup>3</sup>, Dacheng Tao<sup>4</sup>, Xiaogang Wang<sup>1</sup></dd></div>
+      <div><dt>Affiliations</dt><dd><sup>1</sup>ACE Robotics, <sup>2</sup>The Hong Kong Polytechnic University, <sup>3</sup>Zhejiang University, <sup>4</sup>Nanyang Technological University. <sup>†</sup>Project leader.</dd></div>
+    </dl>
+  </div>
+</section>
+
 <section class="sec sec-cite" id="cite">
   <div class="wrap">
     <h2>Cite</h2>
     <div class="bib">
-      <pre id="bibtex">@techreport{acecap0,
-  title       = {ACE-CaP-0: Real-World Code-as-Policies in the Era of Experience},
-  author      = {{ACE-CaP Team}},
-  institution = {ACE Robotics},
-  year        = {2026}
+      <pre id="bibtex">@misc{acecap0,
+  title  = {ACE-CaP-0: Real-World Code-as-Policies in the Era of Experience},
+  author = {{ACE-CaP Team} and Wei, Changxu and Qing, Yunpeng and
+            Ma, Guozheng and Liu, Bowen and He, Zexin and Kong, Yilun and
+            Gu, Haoming and Liu, Jingyuan and Zhu, Tianyu and
+            Wang, Jianfei and Kou, Junqiang and Mo, Huinan and Lv, Hao and
+            Li, Pengbin and Wang, Yuesong and Li, Bo and Zhou, Huan and
+            Liu, Shunyu and Liu, Chunxiao and Jin, Bixuan and
+            Yin, Shaopeng and Wang, Fei and Hou, Zhi and Huang, Jiaxing and
+            Zou, Changqing and Tao, Dacheng and Wang, Xiaogang},
+  year   = {2026},
+  note   = {Project page: https://acerobotics2025.github.io/ACE-CaP/}
 }</pre>
       <button class="btn" id="copy-bib" type="button">Copy BibTeX</button>
     </div>
