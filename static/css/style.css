@@ -70,17 +70,8 @@ h3 { font-size: clamp(22px, 2.4vw, 28px); font-weight: 650; letter-spacing: -0.0
 
 /* hero */
 .hero { padding: clamp(36px, 5vw, 64px) 0 clamp(36px, 4.5vw, 56px); }
-.hero h1 {
-  font-size: clamp(54px, 16.6vw, 232px);
-  font-weight: 800;
-  line-height: 0.84;
-  letter-spacing: -0.03em;
-  font-variation-settings: "opsz" 96;
-  margin: 0 0 clamp(22px, 3vw, 40px) -0.04em;
-  white-space: nowrap;
-}
 .hero-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: clamp(16px, 5vw, 72px); align-items: start; }
-.hero-title { font-size: clamp(23px, 2.7vw, 34px); font-weight: 600; line-height: 1.14; letter-spacing: -0.02em; margin-bottom: 12px; max-width: 20ch; }
+.hero-title { font-size: clamp(30px, 3.5vw, 46px); font-weight: 700; line-height: 1.08; letter-spacing: -0.025em; margin-bottom: 16px; max-width: 18ch; }
 .hero-by { color: var(--muted); margin: 0; }
 .hero-lede { max-width: 58ch; margin-bottom: 22px; }
 .actions { display: flex; flex-wrap: wrap; gap: 10px; }
