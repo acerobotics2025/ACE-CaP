@@ -14,6 +14,8 @@
     return n;
   };
   const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const ROOT = document.documentElement.dataset.root || '';   // data.js paths are relative to the site root
+  const u = p => p ? ROOT + p : p;
   const pct = v => v.toFixed(1) + '%';
 
   /* ---------- video wall ---------- */
@@ -23,17 +25,16 @@
   let wallPaused = still, wallSeen = false;
   const wallVideos = [];
   D.tasks.forEach(t => {
-    const v = el('video', { poster: t.poster, preload: 'none', playsinline: '', loop: '', 'aria-hidden': 'true', tabindex: '-1' });
+    const v = el('video', { poster: u(t.poster), preload: 'none', playsinline: '', loop: '', 'aria-hidden': 'true', tabindex: '-1' });
     v.muted = true;
     v.defaultPlaybackRate = WALL_SPEED;
-    v.src = t.front;
+    v.src = u(t.front);
     wallVideos.push(v);
-    const tile = el('button', { class: 'tile', type: 'button', 'aria-label': t.name + ', ' + pct(t.success) + ' success. Watch in real time.' }, [
+    const tile = el('button', { class: 'card', type: 'button', 'aria-label': t.name + ', ' + pct(t.success) + ' success. Watch in real time.' }, [
       v,
-      el('span', { class: 'tile-label' }, [
-        el('span', { class: 'tile-name', text: t.name }),
-        el('span', { class: 'tile-rate', text: pct(t.success) })
-      ])
+      el('span', { class: 'chip chip-name', text: t.name }),
+      el('span', { class: 'chip chip-speed', text: WALL_SPEED + '×' }),
+      el('span', { class: 'chip chip-rate', text: pct(t.success) })
     ]);
     tile.addEventListener('click', () => { select(t.key, true); $('#tasks').scrollIntoView(); });
     wall.appendChild(tile);
@@ -68,10 +69,10 @@
     const box = $('#task-video');
     box.textContent = '';
     box.className = 'task-video' + (t.tri ? '' : ' single');
-    taskVideo = el('video', { controls: '', playsinline: '', loop: '', preload: 'metadata', poster: t.tri ? t.triPoster : t.poster,
+    taskVideo = el('video', { controls: '', playsinline: '', loop: '', preload: 'metadata', poster: u(t.tri ? t.triPoster : t.poster),
       'aria-label': t.name + ': real-world execution, real time' });
     taskVideo.muted = true;
-    taskVideo.src = t.tri || t.front;
+    taskVideo.src = u(t.tri || t.front);
     box.appendChild(taskVideo);
     if (play && !still) { const p = taskVideo.play(); if (p) p.catch(() => {}); }
     $('#task-name').textContent = t.name;
@@ -87,7 +88,7 @@
     story.textContent = '';
     story.style.setProperty('--n', t.story.length);
     t.story.forEach(s => story.appendChild(el('figure', {}, [
-      el('img', { src: s.img, alt: t.name + ': ' + s.caption, loading: 'lazy', width: 600, height: 400 }),
+      el('img', { src: u(s.img), alt: t.name + ': ' + s.caption, loading: 'lazy', width: 600, height: 400 }),
       el('figcaption', { text: s.caption })
     ])));
     $('#task-note').textContent = (t.tri
@@ -159,6 +160,7 @@
     const W = 860, L = 44, R = 14, T = 50, H1 = 118, GAP = 40, H2 = 84, B = 34;
     const H = T + H1 + GAP + H2 + B;
     const tMax = 49;
+    const BAND = 'rgba(255,255,255,0.05)', GRID = 'rgba(255,255,255,0.12)', LINE = '#409cff', DOT = '#15171c';
     const sx = t => L + (W - L - R) * t / tMax;
     const y1 = z => T + H1 - H1 * z / 22;
     const y2 = g => T + H1 + GAP + H2 - H2 * g / 110;
@@ -167,14 +169,14 @@
     const phases = [[3, 9, 'Grasp'], [9, 24.5, 'Lift and carry'], [24.5, 35.6, 'Push into socket'], [35.6, 38.6, 'Release'], [38.6, 45.6, 'Press top']];
     phases.forEach((p, i) => {
       if (i % 2 === 0) {
-        svg.appendChild(s('rect', { x: sx(p[0]), y: T, width: sx(p[1]) - sx(p[0]), height: H1, fill: '#f1f4f9' }));
-        svg.appendChild(s('rect', { x: sx(p[0]), y: T + H1 + GAP, width: sx(p[1]) - sx(p[0]), height: H2, fill: '#f1f4f9' }));
+        svg.appendChild(s('rect', { x: sx(p[0]), y: T, width: sx(p[1]) - sx(p[0]), height: H1, fill: BAND }));
+        svg.appendChild(s('rect', { x: sx(p[0]), y: T + H1 + GAP, width: sx(p[1]) - sx(p[0]), height: H2, fill: BAND }));
       }
       svg.appendChild(s('text', { x: (sx(p[0]) + sx(p[1])) / 2, y: T - 9, 'text-anchor': 'middle', class: 'phase' }, p[2]));
     });
     const panel = (y0, h, ticks, ys, title) => {
       ticks.forEach(v => {
-        svg.appendChild(s('line', { x1: L, x2: W - R, y1: ys(v), y2: ys(v), stroke: '#d7dde8', 'stroke-width': 1 }));
+        svg.appendChild(s('line', { x1: L, x2: W - R, y1: ys(v), y2: ys(v), stroke: GRID, 'stroke-width': 1 }));
         svg.appendChild(s('text', { x: L - 8, y: ys(v) + 4, 'text-anchor': 'end' }, String(v)));
       });
       svg.appendChild(s('text', { x: L, y: y0 - (y0 === T ? 30 : 12), class: 'lab' }, title));
@@ -182,13 +184,13 @@
     panel(T, H1, [0, 10, 20], y1, 'Left fingertip height (cm)');
     panel(T + H1 + GAP, H2, [0, 50, 100], y2, 'Gripper opening (mm)');
     const path = (ys, i) => data.map((d, k) => (k ? 'L' : 'M') + sx(d[0]).toFixed(1) + ' ' + ys(d[i]).toFixed(1)).join('');
-    svg.appendChild(s('path', { d: path(y1, 1), fill: 'none', stroke: '#2443d0', 'stroke-width': 2, 'stroke-linejoin': 'round' }));
-    svg.appendChild(s('path', { d: path(y2, 2), fill: 'none', stroke: '#2443d0', 'stroke-width': 2, 'stroke-linejoin': 'round' }));
+    svg.appendChild(s('path', { d: path(y1, 1), fill: 'none', stroke: LINE, 'stroke-width': 2, 'stroke-linejoin': 'round' }));
+    svg.appendChild(s('path', { d: path(y2, 2), fill: 'none', stroke: LINE, 'stroke-width': 2, 'stroke-linejoin': 'round' }));
     for (let t = 0; t <= 45; t += 5) svg.appendChild(s('text', { x: sx(t), y: H - B + 18, 'text-anchor': 'middle' }, String(t)));
     svg.appendChild(s('text', { x: W - R, y: H - 2, 'text-anchor': 'end' }, 'Time (s)'));
-    const cross = s('line', { y1: T, y2: H - B, stroke: '#0e1a3a', 'stroke-width': 1, visibility: 'hidden' });
-    const d1 = s('circle', { r: 4.5, fill: '#2443d0', stroke: '#fff', 'stroke-width': 2, visibility: 'hidden' });
-    const d2 = s('circle', { r: 4.5, fill: '#2443d0', stroke: '#fff', 'stroke-width': 2, visibility: 'hidden' });
+    const cross = s('line', { y1: T, y2: H - B, stroke: 'rgba(255,255,255,0.72)', 'stroke-width': 1, visibility: 'hidden' });
+    const d1 = s('circle', { r: 4.5, fill: LINE, stroke: DOT, 'stroke-width': 2, visibility: 'hidden' });
+    const d2 = s('circle', { r: 4.5, fill: LINE, stroke: DOT, 'stroke-width': 2, visibility: 'hidden' });
     svg.appendChild(cross); svg.appendChild(d1); svg.appendChild(d2);
     host.appendChild(svg);
     const tip = el('div', { class: 'tip' });
@@ -232,7 +234,7 @@
 
   /* ---------- nav highlight, BibTeX copy ---------- */
   const links = {};
-  document.querySelectorAll('.nav nav a').forEach(a => { links[a.getAttribute('href').slice(1)] = a; });
+  document.querySelectorAll('.subnav a').forEach(a => { links[a.getAttribute('href').slice(1)] = a; });
   const spy = new IntersectionObserver(es => {
     es.forEach(e => { if (e.isIntersecting) for (const k in links) links[k].classList.toggle('on', k === e.target.id); });
   }, { rootMargin: '-45% 0px -50% 0px' });
